@@ -1,6 +1,5 @@
 fun main() {
     val input = Reader.read("1.txt") { it.toInt() }
-
     println(expenseitoutFor1Star(input))    //840324
     println(expenseitoutFor2Star(input))     //170098110
 }
