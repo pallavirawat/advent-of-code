@@ -1,10 +1,14 @@
 fun main() {
-    val input = Reader.read("2data.txt")
+    val input = Reader.read("2data.txt") { rawToPasswordConvo(it) }
 //    println(input)
-//    println(findValidPasswordCountForOneStar(input))
-    println(findValidPasswordCountForTwoStar(input))
+    println(findValidPasswordCountForOneStar(input)) //591
+    println(findValidPasswordCountForTwoStar(input)) //335
 }
 
+fun rawToPasswordConvo(inputline: String): Password{
+    val split = inputline.split(" ")
+    return Password(split[0], split[1][0], split[2])
+}
 fun findValidPasswordCountForOneStar(input: List<Password>): Int {
     return input.count { it.isValid() }
 }
@@ -36,14 +40,3 @@ data class Password(val rule: String, val alphabet: Char, val value: String,
 
 
 
-object Reader {
-    fun read(fileName: String):  List<Password>{
-        val input = mutableListOf<Password>()
-        val filePath = "$fileName"
-        this::class.java.classLoader.getResource(filePath)?.openStream()?.bufferedReader()?.forEachLine {
-            val split = it.split(" ")
-            input.add(Password(split[0], split[1][0], split[2]))
-        }
-        return input
-    }
-}
