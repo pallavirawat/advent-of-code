@@ -1,7 +1,7 @@
 fun main() {
     val input = Reader.read("3.txt") { it }
 
-//    println(bangYourselfOnTreesP1(input))
+    println(bangYourselfOnTreesP1(input))
     println(bangYourselfOnTreesP2(input))
 
 }
@@ -12,7 +12,6 @@ fun bangYourselfOnTreesP2(input: List<String>): Double {
     val slope3 = bangYourselfOnTreesP1V2(input, 5, 1).toDouble()
     val slope4 = bangYourselfOnTreesP1V2(input, 7, 1).toDouble()
     val slope5 = bangYourselfOnTreesP1V2(input, 1, 2).toDouble()
-    println("$slope1 $slope2 $slope3 $slope4 $slope5")
     return slope1*slope2*slope3*slope4*slope5;
 }
 

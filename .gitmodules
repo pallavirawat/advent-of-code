@@ -1,0 +1,4 @@
+[submodule "advent-of-code-19"]
+	path = advent-of-code-19
+	url = git@github.com:pallavirawat/advent-of-code-19.git
+	branch = master
