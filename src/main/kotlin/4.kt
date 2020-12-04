@@ -1,22 +1,28 @@
 fun main() {
     val input = Reader.read("4.txt") { it }
-    var count = 0
+    val passports = rawToPassports(input)
+
+    println(countValidPassports(passports))
+    println(countValidPassportFor2ndOne(passports))
+
+}
+
+private fun rawToPassports(input: List<String>): MutableList<Passport> {
     var passsportTemp = Passport();
     val passports = mutableListOf<Passport>()
     input.forEach {
-        if(it.isBlank()){
-            count++
+        if (it.isBlank()) {
             passports.add(passsportTemp)
             passsportTemp = Passport();
         }
         val passportFields = it.split(" ")
-        passportFields.forEach { field->
+        passportFields.forEach { field ->
             val split = field.split(":")
             when (split[0]) {
-                "byr" -> passsportTemp.byr = split[1]
-                "iyr" -> passsportTemp.iyr = split[1]
-                "eyr" -> passsportTemp.eyr = split[1]
-                "hgt" -> passsportTemp.hgt = split[1]
+                "byr" -> passsportTemp.byr = BirthYear(split[1])
+                "iyr" -> passsportTemp.iyr = IssueYear(split[1])
+                "eyr" -> passsportTemp.eyr = ExpirationYear(split[1])
+                "hgt" -> passsportTemp.hgt = Height(split[1])
                 "hcl" -> passsportTemp.hcl = split[1]
                 "ecl" -> passsportTemp.ecl = split[1]
                 "pid" -> passsportTemp.pid = split[1]
@@ -25,10 +31,7 @@ fun main() {
         }
     }
     passports.add(passsportTemp)
-
-//    println(countValidPassports(passports))
-    println(countValidPassportFor2ndOne(passports))
-
+    return passports
 }
 
 fun countValidPassportFor2ndOne(input: List<Passport>): Int {
@@ -39,10 +42,38 @@ fun countValidPassports(input: List<Passport>): Int {
     return input.count{it.isValid()}
 }
 
-data class Passport(var byr: String="",
-                    var iyr: String="",
-                    var eyr: String="",
-                    var hgt: String="",
+open class Year(private val year: String, val minValidity: Int, val maxValidity: Int){
+    fun isValid():Boolean{
+        return year.isNotEmpty()
+                && year.length==4
+                && year.toInt()>=minValidity && year.toInt()<=maxValidity
+    }
+}
+
+data class BirthYear(val year: String=""): Year(year, 1920, 2002)
+data class IssueYear(val year: String=""): Year(year, 2010, 2020)
+data class ExpirationYear(val year: String=""): Year(year, 2020, 2030)
+data class Height(val raw: String="",
+                  val height: Int? = if (raw.isNotBlank()) raw.dropLast(2).toIntOrNull() else -1,
+                  val metric: String = if(raw.isNotEmpty()) raw.takeLast(2) else ""){
+    fun isValid(): Boolean {
+        if(raw.isEmpty()){
+            return false
+        }
+        when(metric){
+            "cm" -> if(height in 150..193)
+                return true
+            "in" -> if(height in 59..76)
+                return true
+        }
+        return false
+    }
+}
+
+data class Passport(var byr: BirthYear= BirthYear(),
+                    var iyr: IssueYear=IssueYear(),
+                    var eyr: ExpirationYear=ExpirationYear(),
+                    var hgt: Height=Height(),
                     var hcl: String="",
                     var ecl: String="",
                     var pid: String="",
@@ -50,10 +81,10 @@ data class Passport(var byr: String="",
 ){
     fun isValid(): Boolean{
         if(
-            byr.isNotEmpty()  &&
-            iyr.isNotEmpty() &&
-            eyr.isNotEmpty() &&
-            hgt.isNotEmpty() &&
+            byr.year.isNotEmpty()  &&
+            iyr.year.isNotEmpty() &&
+            eyr.year.isNotEmpty() &&
+            hgt.raw.isNotEmpty() &&
             hcl.isNotEmpty() &&
             ecl.isNotEmpty() &&
             pid.isNotEmpty()){
@@ -65,53 +96,15 @@ data class Passport(var byr: String="",
     fun isValid2(): Boolean{
         if(
             isValid() &&
-            isByrValid() &&
-            isIvrValid() &&
-            isEyrValid() &&
-            isHgtValid() &&
+            byr.isValid() &&
+            iyr.isValid() &&
+            eyr.isValid() &&
+            hgt.isValid() &&
             isHclValid() &&
             isEclValid() &&
             isPidValid()){
             return true
         }
-        return false
-    }
-
-    fun isByrValid(): Boolean {
-        if(byr.length==4 && byr.toInt()>=1920 && byr.toInt()<=2002)
-            return true
-        println("byr $byr")
-        return false
-    }
-
-    fun isIvrValid(): Boolean {
-        if(iyr.length==4 && iyr.toInt()>=2010 && iyr.toInt()<=2020)
-            return true
-        println("iyr $iyr")
-
-        return false
-    }
-
-    fun isEyrValid(): Boolean {
-        if(eyr.length==4 && eyr.toInt()>=2020 && eyr.toInt()<=2030)
-            return true
-        println("eyr $eyr")
-
-        return false
-    }
-
-    fun isHgtValid(): Boolean {
-        val height = hgt.dropLast(2).toInt()
-        if(hgt.endsWith("cm", true)){
-            if(height in 150..193)
-                return true
-        }
-        if(hgt.endsWith("in", true)){
-            if(height in 59..76)
-                return true
-        }
-        println("hgt $hgt")
-
         return false
     }
 
