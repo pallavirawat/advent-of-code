@@ -5,7 +5,8 @@ fun main() {
     val input = Reader.read("10.txt") { it.toBigDecimal() }
 
 //    findShockingVoltages(input.sorted())
-    findArrangementsPossible(input.sorted())
+    findArrangementsPossible(input.sorted()) //the answer is 56693912375296 having 12 5 2
+
 }
 
 // this one basically just makes use of the fact that how many continuous 1s will have how many combinations
