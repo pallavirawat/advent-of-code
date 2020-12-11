@@ -7,7 +7,7 @@ fun main() {
 //
 //    println(input)
 //    findGoldenBagWithProbablyNoMoneyJustBags(input)
-    val inputForP2 = Reader.read("7.txt") {
+    val inputForP2 = Reader.read("07.txt") {
         rawToBagsCount(it)
     }.toMap()
 //    println(inputForP2)

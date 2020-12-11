@@ -1,5 +1,5 @@
 fun main() {
-    val input = Reader.read("5.txt") { it }
+    val input = Reader.read("05.txt") { it }
 //    996
 //    671
     println(doBinaryBoarding(input))

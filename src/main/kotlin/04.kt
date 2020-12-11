@@ -1,5 +1,5 @@
 fun main() {
-    val input = Reader.read("4.txt") { it }
+    val input = Reader.read("04.txt") { it }
     val passports = rawToPassports(input)
 
     println(countValidPassports(passports))

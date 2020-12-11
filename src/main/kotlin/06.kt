@@ -1,7 +1,7 @@
 fun main() {
-    val input = Reader.read("6.txt") { it }
+    val input = Reader.read("06.txt") { it }
 
-    val readAndGroup = Reader.readAndGroup("6.txt", groupBy = { it.isEmpty() }) {
+    val readAndGroup = Reader.readAndGroup("06.txt", groupBy = { it.isEmpty() }) {
         it.toCharArray()
     }
 //    6596

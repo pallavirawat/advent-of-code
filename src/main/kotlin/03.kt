@@ -1,5 +1,5 @@
 fun main() {
-    val input = Reader.read("3.txt") { it }
+    val input = Reader.read("03.txt") { it }
 
     println(bangYourselfOnTreesP1(input))
     println(bangYourselfOnTreesP2(input))

@@ -1,5 +1,5 @@
 fun main() {
-    val input = Reader.read("2data.txt") { rawToPasswordConvo(it) }
+    val input = Reader.read("02.txt") { rawToPasswordConvo(it) }
     println(findValidPasswordCountForOneStar(input)) //591
     println(findValidPasswordCountForTwoStar(input)) //335
 }

@@ -1,5 +1,5 @@
 fun main() {
-    val input = Reader.read("8.txt") { rawToInstruction(it) }
+    val input = Reader.read("08.txt") { rawToInstruction(it) }
 
 //    println(getSumBeforeIninity(input))
     println(getSumBeforeIninityPe3(input))

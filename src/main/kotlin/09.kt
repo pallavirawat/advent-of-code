@@ -1,7 +1,7 @@
 import java.math.BigDecimal
 
 fun main() {
-    val input = Reader.read("9.txt") { it.toBigDecimal() }
+    val input = Reader.read("09.txt") { it.toBigDecimal() }
 
     val invalidNumber = getheBadSeed(input)
     println(invalidNumber)
