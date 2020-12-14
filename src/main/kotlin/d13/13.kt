@@ -1,49 +1,54 @@
 package d13
 
+import Reader
 import java.math.BigDecimal
 
 fun main() {
     val input = Reader.read("13.txt") { it }
     val icanLeaveAt = input[0].toInt()
-    val busTimings = input[1].split(",").filter { it!="x" }.map { it.toInt() }
+    val busTimings = input[1].split(",").filter { it != "x" }.map { it.toInt() }
 
 //    findMyLovelyBus(icanLeaveAt, busTimings)
     findOverlap(input)
 }
 
 fun findOverlap(input: List<String>) {
-    val icanLeaveAt = input[0].toBigDecimal()
-    val busTimings = input[1].replace("x","-1").split(",").mapIndexed {
-        index, s -> BigDecimal(index) to s.toBigDecimal()
+    val busTimings = input[1].replace("x", "-1").split(",").mapIndexed { index, s ->
+        BigDecimal(index) to s.toBigDecimal()
     }
-    val lessFrequentBus = busTimings.maxByOrNull { it.second }
-//    println(lessFrequentBus)
-//    939
-//    7,13,x,x,59,x,31,19
-    lessFrequentBus?.let { (index, bid) ->
-        var foundMatch = false
-        var multiplier = BigDecimal(106723585912)
-        while (!foundMatch){
-            val plausibleMeetingPoint = bid * multiplier - index
-            println("plausible check for $bid $multiplier " +
-                    " $index " +
-                    "$plausibleMeetingPoint")
-            if(checkIfAllOtherBusesMeet(busTimings, plausibleMeetingPoint)){
-                foundMatch = true
-                println("matching point where all the buses meet and crash and party $plausibleMeetingPoint")
-            }
-//            if(plausibleMeetingPoint> BigDecimal(1068781)){
-//                foundMatch=true
-//            }
+    var prev = busTimings[0]
+    var step = prev.second
+    var startState = prev.second
+    for (i in 1 until busTimings.size) {
+        if (busTimings[i].second != BigDecimal(-1)) {
+            var foundMatch = false
+            var multiplier = BigDecimal(1)
+            while (!foundMatch) {
+                val plausibleMeetingPoint = startState + step * multiplier
+                println(
+                    "plausible check for ${prev.second} ${busTimings[i].second} " +
+                            "$multiplier $plausibleMeetingPoint $step $startState"
+                )
+                if ((plausibleMeetingPoint + busTimings[i].first) % busTimings[i].second == BigDecimal.ZERO) {
+                    println("match found at $i for $prev $plausibleMeetingPoint")
+                    step *= busTimings[i].second
+                    startState = plausibleMeetingPoint + step
+                    prev = busTimings[i]
+                    foundMatch = true
+                }
+                multiplier++
 
-            multiplier++
+            }
         }
     }
 }
 
-fun checkIfAllOtherBusesMeet(busTimings: List<Pair<BigDecimal, BigDecimal>>, plausibleMeetingPoint: BigDecimal): Boolean {
-    return busTimings.filter { it.second!= BigDecimal(-1) }.all { (index, bid) ->
-        ((plausibleMeetingPoint+index)%bid) == BigDecimal.ZERO
+fun checkIfAllOtherBusesMeet(
+    busTimings: List<Pair<BigDecimal, BigDecimal>>,
+    plausibleMeetingPoint: BigDecimal
+): Boolean {
+    return busTimings.filter { it.second != BigDecimal(-1) }.all { (index, bid) ->
+        ((plausibleMeetingPoint + index) % bid) == BigDecimal.ZERO
     }
 }
 
@@ -54,6 +59,6 @@ fun findMyLovelyBus(icanLeaveAt: Int, busTimings: List<Int>) {
     }.minByOrNull { it.second }
 
     maxOrNull?.let {
-        println("this is mah bus ${it.first} ${it.first*it.second}")
+        println("this is mah bus ${it.first} ${it.first * it.second}")
     }
 }
