@@ -3,6 +3,16 @@ package d12
 import Reader
 import kotlin.math.abs
 
+fun main() {
+    val input = Reader.read("12.txt") {
+        rawToInstruction(it)
+    }
+
+//    shipManhattten(input)
+
+    drownTheShipAndThisTimeSaveJack(input)
+}
+
 data class Coordinates(val x :Int, val y:Int){
     fun findQuadrant(): Quadrant{
         return if(x>=0){
@@ -134,15 +144,6 @@ fun toNegative(n: Int): Int {
 
 data class Instruction(val instruction: String, val value: Int)
 
-fun main() {
-    val input = Reader.read("12.txt") {
-        rawToInstruction(it)
-    }
-
-//    shipManhattten(input)
-
-    drownTheShipAndThisTimeSaveJack(input)
-}
 
 fun drownTheShipAndThisTimeSaveJack(input: List<Instruction>) {
     val ship = Ship(Coordinates(0, 0), Direction.E)
