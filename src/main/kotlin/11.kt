@@ -147,11 +147,6 @@ fun peopleGetUpSeeAroundAndSitAndHaveALazorNonMyopicVision(currentSeating: List<
     return newSeating
 }
 
-// from:inclusive, to: exclusive
-fun Int.validInRange(from: Int, to: Int) {
-
-}
-
 data class Increment(val xcoord: Int, val ycoord: Int) {
     fun getNextIncrement(xStep: Int, yStep: Int): Increment {
         return Increment(xcoord + xStep, ycoord + yStep)
